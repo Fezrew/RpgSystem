@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
+    PauseMenu pauseCheck;
 
     public float speed = 12f;
     public float gravity = -9.18f;
@@ -16,27 +17,35 @@ public class PlayerController : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    void Start()
+    {
+        pauseCheck = gameObject.GetComponent<PauseMenu>();
+    }
+
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        if (isGrounded && velocity.y < 0)
+        if (!pauseCheck.paused)
         {
-            velocity.y = 0f;
-        }
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+            if (isGrounded && velocity.y < 0)
+            {
+                velocity.y = 0f;
+            }
 
-        Vector3 move = transform.right * x + transform.forward * z;
+            float x = Input.GetAxis("Horizontal");
+            float z = Input.GetAxis("Vertical");
 
-        controller.Move(move * speed * Time.deltaTime);
+            Vector3 move = transform.right * x + transform.forward * z;
 
-        if (!isGrounded)
-        {
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
+            controller.Move(move * speed * Time.deltaTime);
+
+            if (!isGrounded)
+            {
+                velocity.y += gravity * Time.deltaTime;
+                controller.Move(velocity * Time.deltaTime);
+            }
         }
     }
 }

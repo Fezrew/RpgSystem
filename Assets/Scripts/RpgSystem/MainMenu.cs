@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-    public Scene GameScene;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -20,19 +18,13 @@ public class MainMenu : MonoBehaviour
     }
 
     //Creates a new character and starts a new game scene
-    public void NewGame()
+    virtual public void NewGame()
     {
-        //SceneManager.LoadScene(GameScene);
+        SceneManager.LoadScene(1);
     }
 
     //Finds an already existing character
-    public void LoadGame()
-    {
-
-    }
-
-    //Returns to the main menu scene
-    public void ToMain()
+    virtual public void LoadGame()
     {
 
     }
@@ -40,6 +32,7 @@ public class MainMenu : MonoBehaviour
     //Closes the application
     public void Quit()
     {
+        Debug.Log("Exiting Game");
         Application.Quit();
     }
 }

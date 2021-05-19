@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 907d81cc22c6c28438464836263422cd, type: 3}
+  m_Name: Character
+  m_EditorClassIdentifier: 
+  CharacterStats:
+  - {fileID: 11400000, guid: ce606121fd32d8a40b09751a41ed796b, type: 2}
+  - {fileID: 11400000, guid: ce0f57f6e936740409cba0c9ba4058bd, type: 2}
+  - {fileID: 11400000, guid: d127c376d7d0d8b4583a720f7e8e01c5, type: 2}
+  - {fileID: 11400000, guid: acd56d31d1605a941ba8d457dcec2a8c, type: 2}
+  - {fileID: 11400000, guid: 9d845ff968a4df84e8538e0e2aefd35c, type: 2}
+  - {fileID: 11400000, guid: 5f781bc4a730f0f47b915a984e79f93c, type: 2}
+  - {fileID: 11400000, guid: 26b9bb3092b1f2b478b8a3fa865b74a0, type: 2}
+  - {fileID: 11400000, guid: 2254df9d761484d40aaa6965315ba71b, type: 2}
+  CharacterLevel: 1
+  SkillPointsPerLevel: 1

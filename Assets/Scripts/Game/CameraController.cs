@@ -9,9 +9,9 @@ public class CameraController : MonoBehaviour
     public int mouseSensitivity = 30;
 
     public Transform player;
+    public PauseMenu pauseCheck;
 
     private float xRotation = 0f;
-
     private float mouseX = 0f;
     private float mouseY = 0f;
 
@@ -25,16 +25,19 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse1))
+        if (!pauseCheck.paused)
         {
-            mouseX = Input.GetAxis("Mouse X") * (mouseSensitivity * 100) * Time.deltaTime;
-            mouseY = Input.GetAxis("Mouse Y") * (mouseSensitivity * 100) * Time.deltaTime;
+            if (Input.GetKey(KeyCode.Mouse1))
+            {
+                mouseX = Input.GetAxis("Mouse X") * (mouseSensitivity * 100) * Time.deltaTime;
+                mouseY = Input.GetAxis("Mouse Y") * (mouseSensitivity * 100) * Time.deltaTime;
+            }
+
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            player.Rotate(Vector3.up * mouseX);
         }
-
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        player.Rotate(Vector3.up * mouseX);
     }
 }
