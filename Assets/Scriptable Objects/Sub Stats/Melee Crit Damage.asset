@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4493418434723745ab8315c1a5bc61b, type: 3}
   m_Name: Melee Crit Damage
   m_EditorClassIdentifier: 
-  GrowthRate: 2
+  stat: 9
+  GrowthRate: 20
   isPercentage: 0
-  mainStat: {fileID: 0}
+  maximum: 0

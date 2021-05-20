@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4493418434723745ab8315c1a5bc61b, type: 3}
   m_Name: MaxHealth
   m_EditorClassIdentifier: 
-  GrowthRate: 5
+  statName: Max Health
+  GrowthRate: 60
   isPercentage: 0
-  minimum: 10
   maximum: 0
-  mainStat: {fileID: 0}

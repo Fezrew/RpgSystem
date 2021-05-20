@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4493418434723745ab8315c1a5bc61b, type: 3}
   m_Name: Magic dot
   m_EditorClassIdentifier: 
-  GrowthRate: 1
+  stat: 13
+  GrowthRate: 10
   isPercentage: 0
-  minimum: 0
   maximum: 0
-  mainStat: {fileID: 0}

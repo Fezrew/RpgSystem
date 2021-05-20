@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4493418434723745ab8315c1a5bc61b, type: 3}
   m_Name: MaxMana
   m_EditorClassIdentifier: 
-  GrowthRate: 4
+  stat: 2
+  GrowthRate: 40
   isPercentage: 0
-  minimum: 0
   maximum: 0
-  mainStat: {fileID: 0}

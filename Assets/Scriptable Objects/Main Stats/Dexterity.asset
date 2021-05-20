@@ -15,3 +15,4 @@ MonoBehaviour:
   SubStats:
   - {fileID: 11400000, guid: 12bdb92e250c195488c124579441914a, type: 2}
   - {fileID: 11400000, guid: 137d8f3a9bf554a4f9298c782a691cba, type: 2}
+  statLevel: 0
