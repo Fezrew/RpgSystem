@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public CharacterController controller;
-    PauseMenu pauseCheck;
+    public PauseMenu pauseCheck;
 
     public float speed = 12f;
     public float gravity = -9.18f;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        pauseCheck = gameObject.GetComponent<PauseMenu>();
+        
     }
 
     // Update is called once per frame

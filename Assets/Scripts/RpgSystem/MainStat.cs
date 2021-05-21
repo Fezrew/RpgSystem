@@ -16,7 +16,7 @@ public class MainStat : ScriptableObject
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public MainStat Copy()
@@ -32,7 +32,10 @@ public class MainStat : ScriptableObject
         // eg because I have a Wisdom of 10, add more to my MaxMana
         foreach (SubStat subStat in SubStats)
         {
-            ch.stats[subStat.stat] = subStat.GrowthRate * Mathf.Pow(statIncreaseRate, statLevel);
+            if (!subStat.isPercentage)
+            {
+                ch.stats[subStat.stat] = subStat.GrowthRate * Mathf.Pow(statIncreaseRate, statLevel);
+            }
         }
     }
 }
