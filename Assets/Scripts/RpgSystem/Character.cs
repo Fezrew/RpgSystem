@@ -5,6 +5,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public MainStat[] CharacterStats;
+    public int[] mainStatValues;
     public StatInfo[] CharacterStatInfo;
     public SkillTree CharacterSkillTree;
     public float Health;
@@ -36,7 +37,6 @@ public class Character : MonoBehaviour
     /// </summary>
     int availableSkillPoints;
 
-    public int[] statValues;
 
     public enum Stat
     {
@@ -96,15 +96,13 @@ public class Character : MonoBehaviour
         for (int i = 0; i < CharacterStats.Length; i++)
         {
             CharacterStats[i] = CharacterStats[i].Copy();
-            if (i < statValues.Length)
-            {
-                CharacterStats[i].statLevel = statValues[i];
-            }
-
-            CharacterStats[i].ApplyTo(this);
         }
+
+        //Update the available stat points
         StatTotalUpdate();
-        UpdateInfo();
+
+        //Update all stat totals
+        UpdateStats();
         Health = GetStatValue(Stat.MaxHealth);
     }
 
@@ -126,20 +124,37 @@ public class Character : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, MeleeRange, CharacterMask))
         {
             hit.collider.gameObject.GetComponent<Character>().Health -= Damage;
+
+            //Tell us who is hitting who for how much
             Debug.Log(gameObject.name + " attacked " + hit.collider.gameObject.name + " for " + Damage + " damage.\n" +
                 hit.collider.gameObject.name + " has " + hit.collider.gameObject.GetComponent<Character>().Health + " health left.");
         }
     }
 
+    /// <summary>
+    /// Finds the amount of stats owned and used
+    /// (e.g. I'm at level 40, but I have 20 points in VIT so I only have 20 points left)
+    /// </summary>
     public void StatTotalUpdate()
     {
         totalSkillPoints = SkillPointsPerLevel * CharacterLevel;
         availableSkillPoints = totalSkillPoints - spentSkillPoints;
     }
 
-    public void UpdateInfo()
+    public void UpdateStats()
     {
         CharacterStatInfo = new StatInfo[statNames.Count];
+        mainStatValues = new int[CharacterStats.Length];
+
+        for (int i = 0; i < CharacterStats.Length; i++)
+        {
+            if (i < mainStatValues.Length)
+            {
+                CharacterStats[i].statLevel = mainStatValues[i];
+            }
+
+            CharacterStats[i].ApplyTo(this);
+        }
 
         for (int i = 0; i < CharacterStatInfo.Length; i++)
         {
@@ -149,8 +164,3 @@ public class Character : MonoBehaviour
         }
     }
 }
-
-
-//Doesn't work but I want it for reference pile:
-
-//stats.TryGetValue(Stat.Block, out GetStatValue());
