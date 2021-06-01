@@ -4,16 +4,40 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    /// <summary>
+    /// All the characters main stats
+    /// </summary>
     public MainStat[] CharacterStats;
+    /// <summary>
+    /// A list of numbers that change the level of the main stats and update the substats
+    /// </summary>
     public int[] mainStatValues;
+    /// <summary>
+    /// Holds all of the substat values that are calculated at run-time
+    /// </summary>
     public StatInfo[] CharacterStatInfo;
+    /// <summary>
+    /// Currently useless
+    /// </summary>
     public SkillTree CharacterSkillTree;
     public float Health;
     public int Damage;
 
+    /// <summary>
+    /// Are you in melee range?
+    /// </summary>
     bool canMelee = false;
-    Transform CharacterPosition;
+    /// <summary>
+    /// Decides at which range you are capable of meleeing an enemy at
+    /// </summary>
     public float MeleeRange;
+    /// <summary>
+    /// Your position and the centre point of the radius check to see if enemies are in melee range
+    /// </summary>
+    Transform CharacterPosition;
+    /// <summary>
+    /// The layer that decides if you are a character and therefore target-able
+    /// </summary>
     public LayerMask CharacterMask;
 
     /// <summary>
@@ -79,10 +103,20 @@ public class Character : MonoBehaviour
         { Stat.CritChance, "Critical Strike Chance" }
     };
 
+    /// <summary>
+    /// Returns the total value of the substat decided by the level of the mainstat
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <returns>The substat you wish to know the value of</returns>
     public float GetStatValue(Stat stat)
     {
         return stats.ContainsKey(stat) ? stats[stat] : 0;
     }
+    /// <summary>
+    /// Returns the name of a substat
+    /// </summary>
+    /// <param name="stat"></param>
+    /// <returns>The substat you wish to know the value of</returns>
     public string GetStatName(Stat stat)
     {
         return statNames.ContainsKey(stat) ? statNames[stat] : "";
@@ -95,6 +129,7 @@ public class Character : MonoBehaviour
 
         for (int i = 0; i < CharacterStats.Length; i++)
         {
+            //Create a copy of all MainStats to avoid altering the scriptable objects in Assets
             CharacterStats[i] = CharacterStats[i].Copy();
         }
 
@@ -109,12 +144,20 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Is there an attack-able object in your range?
         canMelee = Physics.CheckSphere(CharacterPosition.position, MeleeRange, CharacterMask);
 
+        //If you can melee and press the melee button, Attack
         if (canMelee && Input.GetKeyDown(KeyCode.Q))
         {
             Attack();
         }
+    }
+
+    public void UpdateCharacter()
+    {
+        StatTotalUpdate();
+        UpdateStats();
     }
 
     public void Attack()
@@ -123,6 +166,7 @@ public class Character : MonoBehaviour
         // Does the ray intersect any objects excluding the player layer
         if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, MeleeRange, CharacterMask))
         {
+            //TODO: Apply damage through the correct formula
             hit.collider.gameObject.GetComponent<Character>().Health -= Damage;
 
             //Tell us who is hitting who for how much
@@ -144,7 +188,6 @@ public class Character : MonoBehaviour
     public void UpdateStats()
     {
         CharacterStatInfo = new StatInfo[statNames.Count];
-        mainStatValues = new int[CharacterStats.Length];
 
         for (int i = 0; i < CharacterStats.Length; i++)
         {

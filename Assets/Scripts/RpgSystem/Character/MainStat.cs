@@ -9,9 +9,11 @@ public class MainStat : ScriptableObject
     public int statLevel = 0;
 
     /// <summary>
-    /// The rate that stat increases grow
+    /// The rate that stat increases improve between levels
     /// </summary>
     float statIncreaseRate = 1.054412f;
+
+    public float statPercentIncreaseRate = 80f;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,13 @@ public class MainStat : ScriptableObject
             if (!subStat.isPercentage)
             {
                 ch.stats[subStat.stat] = subStat.GrowthRate * Mathf.Pow(statIncreaseRate, statLevel);
+            }
+            else if(subStat.isPercentage)
+            {
+                //TODO: Make math work
+                //float percent = (float)statLevel / (float)statLevel + statPercentIncreaseRate * ((float)subStat.maximum / 100f);
+                //Vector2 math = new Vector2(percent - 1, percent);
+                //ch.stats[subStat.stat] = math.normalized.y;
             }
         }
     }

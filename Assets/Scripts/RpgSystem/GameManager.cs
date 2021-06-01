@@ -4,25 +4,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public Character Player;
+    public InGameMenu GameMenu;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (instance == null)
-        {
-            DontDestroyOnLoad(gameObject);
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        Player.UpdateCharacter();
+        GameMenu.UpdateInfo();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            Player.UpdateCharacter();
+            GameMenu.UpdateInfo();
+        }
     }
 }
