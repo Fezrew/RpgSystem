@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Player.UpdateCharacter();
-        GameMenu.UpdateInfo();
     }
 
     // Update is called once per frame

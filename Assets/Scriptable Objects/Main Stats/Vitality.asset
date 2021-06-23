@@ -16,3 +16,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 296e22646df8afb49a0cd0776f4facc3, type: 2}
   - {fileID: 11400000, guid: d74a3f21687ce0a4ba5e133179e4a98b, type: 2}
   statLevel: 0
+  statMax: 100
+  statPercentIncreaseRate: 80

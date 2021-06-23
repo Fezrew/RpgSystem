@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 1791755990993050647}
+  pauseCheck: {fileID: 0}
   speed: 12
   gravity: -9.18
   groundCheck: {fileID: 1791755991635475073}
@@ -95,8 +96,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5f781bc4a730f0f47b915a984e79f93c, type: 2}
   - {fileID: 11400000, guid: 26b9bb3092b1f2b478b8a3fa865b74a0, type: 2}
   - {fileID: 11400000, guid: 2254df9d761484d40aaa6965315ba71b, type: 2}
+  mainStatValues: 0000000000000000000000000000000000000000000000000000000000000000
+  CharacterStatInfo: []
   CharacterSkillTree: {fileID: 0}
-  MaxHealth: 100
   Health: 0
   Damage: 20
   MeleeRange: 5

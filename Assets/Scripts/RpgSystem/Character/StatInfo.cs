@@ -5,15 +5,16 @@ using UnityEngine;
 [System.Serializable]
 public struct StatInfo
 {
-    [SerializeField]
-    string statName;
+    public string StatName;
+    public float StatValue;
 
-    [SerializeField]
-    float statValue;
+    [HideInInspector]
+    public bool PercentStat;
 
-    public void CreateStatInfo(string name, float value)
+    public void CreateStatInfo(string name, float value, bool isPercentStat)
     {
-        statName = name;
-        statValue = value;
+        StatName = name;
+        StatValue = value;
+        PercentStat = isPercentStat;
     }
 }

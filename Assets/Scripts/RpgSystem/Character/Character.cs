@@ -61,8 +61,7 @@ public class Character : MonoBehaviour
     /// </summary>
     int availableSkillPoints;
 
-
-    public enum Stat
+    public enum subStat
     {
         MaxHealth,
         PhysResist,
@@ -82,48 +81,59 @@ public class Character : MonoBehaviour
         CritChance
     }
 
-    public Dictionary<Stat, float> stats = new Dictionary<Stat, float>();
-    public Dictionary<Stat, string> statNames = new Dictionary<Stat, string>()
+    public Dictionary<subStat, float> subStatValues = new Dictionary<subStat, float>();
+    public Dictionary<subStat, bool> percentSubStats = new Dictionary<subStat, bool>();
+    public Dictionary<subStat, string> subStatNames = new Dictionary<subStat, string>()
     {
-        { Stat.MaxHealth, "Maximum Health" },
-        { Stat.PhysResist, "Physical Damage Resist" },
-        { Stat.MaxMana, "Maximum Mana" },
-        { Stat.MagResist, "Magical Damage Resistance" },
-        { Stat.Block, "Block Rating" },
-        { Stat.DamReduce, "Damage Reduction" },
-        { Stat.Evade, "Evasion Rating" },
-        { Stat.CritReduce, "Enemy Crit Chance Reduction" },
-        { Stat.MeleeAcc, "Melee Accuracy Rating" },
-        { Stat.MeleeCrit, "Melee Crit Damage" },
-        { Stat.RangedAcc, "Ranged Accuracy Rating" },
-        { Stat.RangedCrit, "Ranged Crit Damage" },
-        { Stat.MagAcc, "Magical Accuracy Rating" },
-        { Stat.MagDot, "Magic Damage-Over-Time" },
-        { Stat.ItemDrop, "Item Drop Chance" },
-        { Stat.CritChance, "Critical Strike Chance" }
+        { subStat.MaxHealth, "Maximum Health" },
+        { subStat.PhysResist, "Physical Damage Resist" },
+        { subStat.MaxMana, "Maximum Mana" },
+        { subStat.MagResist, "Magical Damage Resistance" },
+        { subStat.Block, "Block Rating" },
+        { subStat.DamReduce, "Damage Reduction" },
+        { subStat.Evade, "Evasion Rating" },
+        { subStat.CritReduce, "Enemy Crit Chance Reduction" },
+        { subStat.MeleeAcc, "Melee Accuracy Rating" },
+        { subStat.MeleeCrit, "Melee Crit Damage" },
+        { subStat.RangedAcc, "Ranged Accuracy Rating" },
+        { subStat.RangedCrit, "Ranged Crit Damage" },
+        { subStat.MagAcc, "Magical Accuracy Rating" },
+        { subStat.MagDot, "Magic Damage-Over-Time" },
+        { subStat.ItemDrop, "Item Drop Chance" },
+        { subStat.CritChance, "Critical Strike Chance" }
     };
 
     /// <summary>
     /// Returns the total value of the substat decided by the level of the mainstat
     /// </summary>
-    /// <param name="stat"></param>
-    /// <returns>The substat you wish to know the value of</returns>
-    public float GetStatValue(Stat stat)
+    /// <param name="stat">The substat that you want the value of</param>
+    /// <returns>The value of the subastat you called in the function</returns>
+    public float GetSubStatValue(subStat stat)
     {
-        return stats.ContainsKey(stat) ? stats[stat] : 0;
+        return subStatValues.ContainsKey(stat) ? subStatValues[stat] : 0;
     }
     /// <summary>
     /// Returns the name of a substat
     /// </summary>
-    /// <param name="stat"></param>
-    /// <returns>The substat you wish to know the value of</returns>
-    public string GetStatName(Stat stat)
+    /// <param name="stat">The substat that you want the name of</param>
+    /// <returns>The name of the stat you called in the function</returns>
+    public string GetSubStatName(subStat stat)
     {
-        return statNames.ContainsKey(stat) ? statNames[stat] : "";
+        return subStatNames.ContainsKey(stat) ? subStatNames[stat] : "";
+    }
+
+    /// <summary>
+    /// Returns the value type of the stat in question
+    /// </summary>
+    /// <param name="stat">The substat that may be a percentage</param>
+    /// <returns>The information of whether the stat is a percentage or not</returns>
+    public bool GetPercentStat(subStat stat)
+    {
+        return percentSubStats.ContainsKey(stat) ? percentSubStats[stat] : false;
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         CharacterPosition = gameObject.transform;
 
@@ -133,12 +143,9 @@ public class Character : MonoBehaviour
             CharacterStats[i] = CharacterStats[i].Copy();
         }
 
-        //Update the available stat points
-        StatTotalUpdate();
+        UpdateCharacter();
 
-        //Update all stat totals
-        UpdateStats();
-        Health = GetStatValue(Stat.MaxHealth);
+        Health = GetSubStatValue(subStat.MaxHealth);
     }
 
     // Update is called once per frame
@@ -185,9 +192,12 @@ public class Character : MonoBehaviour
         availableSkillPoints = totalSkillPoints - spentSkillPoints;
     }
 
+    /// <summary>
+    /// Updates all the points put into main stats and the resulting sub stat values that change from it
+    /// </summary>
     public void UpdateStats()
     {
-        CharacterStatInfo = new StatInfo[statNames.Count];
+        CharacterStatInfo = new StatInfo[subStatNames.Count];
 
         for (int i = 0; i < CharacterStats.Length; i++)
         {
@@ -202,7 +212,7 @@ public class Character : MonoBehaviour
         for (int i = 0; i < CharacterStatInfo.Length; i++)
         {
             StatInfo charInfo = new StatInfo();
-            charInfo.CreateStatInfo(GetStatName((Stat)i), GetStatValue((Stat)i));
+            charInfo.CreateStatInfo(GetSubStatName((subStat)i), GetSubStatValue((subStat)i), GetPercentStat((subStat)i));
             CharacterStatInfo[i] = charInfo;
         }
     }
