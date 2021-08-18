@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using RPGSystem;
 
 public class StatTab : MenuTab
 {
@@ -10,6 +11,12 @@ public class StatTab : MenuTab
     /// </summary>
     [Tooltip("The item to be placed in the stat tabs(should just be text)")]
     public GameObject StatUI;
+    /// <summary>
+    /// The buttons used to increase/decrease your player's stats
+    /// </summary>
+    public GameObject statButtonObject;
+    public GameManager GameManager;
+
     /// <summary>
     /// The objects that hold all the created menu items
     /// These should all have an image as it's first child object, otherwise this won't work
@@ -23,6 +30,11 @@ public class StatTab : MenuTab
     /// Holds an array of text items that display sub stat names and their saved value
     /// </summary>
     GameObject[] SubItems;
+    /// <summary>
+    /// The space where buttons that can change stats are spawned
+    /// </summary>
+    Transform ButtonSpace;
+    GameObject[] StatButtonList;
 
     /// <summary>
     /// Finds the tabs being used to hold items and fills them accordingly
@@ -32,6 +44,9 @@ public class StatTab : MenuTab
     {
         //Create an array to hold all of the main stats being displayed
         MainItems = new GameObject[player.CharacterStats.Length];
+
+        //Create an array of buttons to match the size of MainItems
+        StatButtonList = new GameObject[MainItems.Length];
 
         //Make another array to hold all the main/sub stat tabs
         Transform[] children = new Transform[transform.childCount];
@@ -48,6 +63,12 @@ public class StatTab : MenuTab
             {
                 //Increment the item holder count so we know how large the array needs to be
                 itemHolderCount++;
+            }
+            else
+            {
+                //Set the non-stat-holding object to take stat buttons
+                ButtonSpace = children[i];
+
             }
         }
 
@@ -83,6 +104,14 @@ public class StatTab : MenuTab
 
             //Write the information over the top of the first image we saved earlier
             MainItems[i] = Instantiate(statUI, ItemHolders[0]);
+
+            if(ButtonSpace != null)
+            {
+                StatButtonList[i] = Instantiate(statButtonObject, ButtonSpace);
+                StatButton statButton = StatButtonList[i].GetComponent<StatButton>();
+                statButton.GM = GameManager;
+                statButton.mainStat = GameManager.Player.CharacterStats[i];
+            }
         }
 
         int currentStat = 0;

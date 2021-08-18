@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public struct StatInfo
+namespace RPGSystem
 {
-    public string StatName;
-    public float StatValue;
-
-    [HideInInspector]
-    public bool PercentStat;
-
-    public void CreateStatInfo(string name, float value, bool isPercentStat)
+    [System.Serializable]
+    public struct StatInfo
     {
-        StatName = name;
-        StatValue = value;
-        PercentStat = isPercentStat;
+        public string StatName;
+        public float StatValue;
+
+        [HideInInspector]
+        public bool PercentStat;
+
+        public void CreateStatInfo(string name, float value, bool isPercentStat)
+        {
+            StatName = name;
+            StatValue = value;
+            PercentStat = isPercentStat;
+        }
     }
 }

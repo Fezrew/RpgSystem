@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RPGSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,12 +15,9 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void UpdateGame()
     {
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            Player.UpdateCharacter();
-            GameMenu.UpdateInfo();
-        }
+        Player.UpdateCharacter();
+        GameMenu.UpdateInfo();
     }
 }
