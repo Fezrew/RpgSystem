@@ -43,7 +43,7 @@ namespace RPGSystem
                     if (statLevel != 0)
                     {
                         float subStatTotal = subStat.maximum * Mathf.Tan((Mathf.PI / 4 / (float)statMax) * (float)statLevel);
-                        ch.subStatValues[subStat.stat] = subStatTotal;
+                        ch.subStatValues[subStat.stat] = (int)subStatTotal;
                     }
                 }
             }

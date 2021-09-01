@@ -21,7 +21,7 @@ namespace RPGSystem
         /// <summary>
         /// Currently useless
         /// </summary>
-        public float Health;
+        public int currentHealth;
         public int Damage;
 
         /// <summary>
@@ -32,6 +32,7 @@ namespace RPGSystem
         /// Decides at which range you are capable of meleeing an enemy at
         /// </summary>
         public float MeleeRange;
+        float RangedRange;
         /// <summary>
         /// Your position and the centre point of the radius check to see if enemies are in melee range
         /// </summary>
@@ -146,7 +147,8 @@ namespace RPGSystem
 
             UpdateCharacter();
 
-            Health = GetSubStatValue(subStat.MaxHealth);
+            currentHealth = (int)GetSubStatValue(subStat.MaxHealth);
+            RangedRange = MeleeRange * 5;
         }
 
         // Update is called once per frame
@@ -172,14 +174,128 @@ namespace RPGSystem
         {
             RaycastHit hit;
             // Does the ray intersect any objects excluding the player layer
+            //Melee
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, MeleeRange, CharacterMask))
             {
-                //TODO: Apply damage through the correct formula
-                hit.collider.gameObject.GetComponent<Character>().Health -= Damage;
+                Character target = hit.collider.gameObject.GetComponent<Character>();
+                float hitDamage = 0;
 
-                //Tell us who is hitting who for how much
-                Debug.Log(gameObject.name + " attacked " + hit.collider.gameObject.name + " for " + Damage + " damage.\n" +
-                    hit.collider.gameObject.name + " has " + hit.collider.gameObject.GetComponent<Character>().Health + " health left.");
+                Debug.Log(gameObject.name + " melee attacked " + target.name + " and...");
+
+                //Does the attack hit?
+                if (Random.Range(0, 100) <= GetSubStatValue(subStat.MeleeAcc) / target.GetSubStatValue(subStat.Evade) * 100)
+                {
+                    //Does the attack get blocked?
+                    if (Random.Range(0, 100) <= GetSubStatValue(subStat.MeleeAcc) / target.GetSubStatValue(subStat.Block) * 100)
+                    {
+                        //Did the attack crit
+                        if (Random.Range(0, 100) <= GetSubStatValue(subStat.CritChance) - target.GetSubStatValue(subStat.CritReduce))
+                        {
+                            Debug.Log($"The attack critically hit!");
+
+                            hitDamage = Damage + GetSubStatValue(subStat.MeleeCrit) - ((Damage + GetSubStatValue(subStat.MeleeCrit)) * (target.GetSubStatValue(subStat.PhysResist) / 100));
+                        }
+                        //No
+                        else
+                        {
+                            hitDamage = Damage - (Damage * (target.GetSubStatValue(subStat.PhysResist) / 100));
+                        }
+                    }
+                    //If it was blocked
+                    else
+                    {
+                        Debug.Log($"{target.name} blocked the attack!");
+
+                        //Did the attack crit
+                        if (Random.Range(0, 100) <= GetSubStatValue(subStat.CritChance) - target.GetSubStatValue(subStat.CritReduce))
+                        {
+                            Debug.Log($"The attack critically hit!");
+
+                            hitDamage = (Damage + GetSubStatValue(subStat.MeleeCrit) - ((Damage + GetSubStatValue(subStat.MeleeCrit)) *
+                                (target.GetSubStatValue(subStat.PhysResist) / 100)) - target.GetSubStatValue(subStat.DamReduce));
+                        }
+                        //No
+                        else
+                        {
+                            hitDamage = (Damage - (Damage * (target.GetSubStatValue(subStat.PhysResist) / 100)) - target.GetSubStatValue(subStat.DamReduce));
+                        }
+                    }
+                }
+                //If it was dodged
+                else
+                {
+                    Debug.Log($"{target.name} dodged!");
+                }
+
+                if (hitDamage >= 0)
+                {
+                    target.currentHealth -= (int)hitDamage;
+                }
+                hitDamage = hitDamage > 0 ? hitDamage : 0;
+                Debug.Log($"The attack dealt {hitDamage} damage!");
+                Debug.Log($"{target} has {target.currentHealth} health left!");
+            }
+            //Ranged
+            else if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, RangedRange, CharacterMask))
+            {
+                Character target = hit.collider.gameObject.GetComponent<Character>();
+                float hitDamage = 0;
+
+                Debug.Log(gameObject.name + " ranged attacked " + target.name + " and...");
+
+                //Does the attack hit?
+                if (Random.Range(0, 100) <= GetSubStatValue(subStat.RangedAcc) / target.GetSubStatValue(subStat.Evade) * 100)
+                {
+                    //Does the attack get blocked?
+                    if (Random.Range(0, 100) <= GetSubStatValue(subStat.RangedAcc) / target.GetSubStatValue(subStat.Block) * 100)
+                    {
+                        //Did the attack crit
+                        if (Random.Range(0, 100) <= GetSubStatValue(subStat.CritChance) - target.GetSubStatValue(subStat.CritReduce))
+                        {
+                            Debug.Log($"The attack critically hit!");
+
+                            hitDamage = Damage + GetSubStatValue(subStat.RangedCrit) - ((Damage + GetSubStatValue(subStat.RangedCrit)) * (target.GetSubStatValue(subStat.PhysResist) / 100));
+                        }
+                        //No
+                        else
+                        {
+                            hitDamage = Damage - (Damage * (target.GetSubStatValue(subStat.PhysResist) / 100));
+                        }
+                    }
+                    //If it was blocked
+                    else
+                    {
+                        Debug.Log($"{target.name} blocked the attack!");
+
+                        //Did the attack crit
+                        if (Random.Range(0, 100) <= GetSubStatValue(subStat.CritChance) - target.GetSubStatValue(subStat.CritReduce))
+                        {
+                            Debug.Log($"The attack critically hit!");
+
+                            hitDamage = (Damage + GetSubStatValue(subStat.RangedCrit) - ((Damage + GetSubStatValue(subStat.RangedCrit)) *
+                                (target.GetSubStatValue(subStat.PhysResist) / 100)) - target.GetSubStatValue(subStat.DamReduce));
+                        }
+                        //No
+                        else
+                        {
+                            hitDamage = (Damage - (Damage * (target.GetSubStatValue(subStat.PhysResist) / 100)) - target.GetSubStatValue(subStat.DamReduce));
+                        }
+                    }
+                }
+                //If it was dodged
+                else
+                {
+                    Debug.Log($"{target.name} dodged!");
+                }
+
+                if (hitDamage >= 0)
+                {
+                    target.currentHealth -= (int)hitDamage;
+                }
+
+                hitDamage = hitDamage > 0 ? hitDamage : 0;
+                Debug.Log($"The attack dealt {hitDamage} damage!");
+                Debug.Log($"{target} has {target.currentHealth} health left!");
             }
         }
 
